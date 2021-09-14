@@ -18,7 +18,7 @@ export default function Cadastro(props) {
     event.preventDefault();
 
     try {
-      const res = localStorage.setItem(state.name, JSON.stringify(state));
+      const res = localStorage.setItem("state", JSON.stringify(state));
       setError(null);
       console.log(res);
       props.history.push("/");
