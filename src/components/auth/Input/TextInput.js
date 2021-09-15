@@ -10,6 +10,7 @@ function TextInput(props) {
         value={props.value}
         name={props.name}
         required={props.required}
+        placeholder={props.placeholder}
       />
     </div>
   );

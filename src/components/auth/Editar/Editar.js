@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import TextInput from "../Input/TextInput";
 
-export default function Cadastro(props) {
-  // Pegando os dados que o usuário digitou.
+export default function Editar(props) {
+  // Pegando os dados da Lista para Editar.
   const [state, setState] = useState({
     name: "",
     cpf: "",
@@ -12,15 +11,27 @@ export default function Cadastro(props) {
   });
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    try {
+      const res = JSON.parse(localStorage.getItem("state"), this.state);
+      if (res) {
+        setState(res);
+      }
+      setState({ state: [...res.data] });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   function handleChange(event) {
-    setState({ ...state, [event.target.name]: event.target.value });
+    setState({ [event.target.name]: event.target.value });
   }
-  // Enviando Para Lista.
+
   async function handleSubmit(event) {
     event.preventDefault();
 
     try {
-      const res = localStorage.setItem("state", JSON.stringify(state));
+      const res = localStorage.putItem("state", JSON.stringify(state));
       setError(null);
       console.log(res);
       props.history.push("/");
@@ -32,23 +43,20 @@ export default function Cadastro(props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="d-flex justify-content-between mb-5">
-        <h1 style={{ paddingRight: "62%" }}>Cadastro</h1>
-        <Link to="/" className="btn-close " disabled aria-label="Close"></Link>
-        <hr />
-      </div>
+      <h1>Cadastro</h1>
+      <hr />
+
       {/* Campo de Nome */}
       <TextInput
         label="Nome"
         name="name"
         type="text"
         id="CadastroFormName"
-        placeholder="Nome completo (sem abreviações)"
         value={state.name}
         error={error}
         onChange={handleChange}
-        required
       />
+
       {/* Campo de CPF */}
       <TextInput
         label="CPF"
@@ -58,8 +66,8 @@ export default function Cadastro(props) {
         value={state.cpf}
         error={error}
         onChange={handleChange}
-        required
       />
+
       {/* Campo de Phone */}
       <TextInput
         label="Telefone"
@@ -69,8 +77,8 @@ export default function Cadastro(props) {
         value={state.phone}
         error={error}
         onChange={handleChange}
-        required
       />
+
       {/* Campo de E-mail */}
       <TextInput
         label="E-mail"
@@ -80,8 +88,8 @@ export default function Cadastro(props) {
         value={state.email}
         error={error}
         onChange={handleChange}
-        required
       />
+
       <button
         style={{ backgroundColor: "#00c8b3" }}
         type="submit"
@@ -89,6 +97,7 @@ export default function Cadastro(props) {
       >
         Cadastrar
       </button>
+
       {error ? (
         <div className="alert alert-danger mt-3" role="alert">
           {error}
