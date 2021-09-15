@@ -10,7 +10,7 @@ export default function Cadastro(props) {
     phone: "",
     email: "",
   });
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
 
   function handleChange(event) {
     setState({ ...state, [event.target.name]: event.target.value });
@@ -18,16 +18,17 @@ export default function Cadastro(props) {
   // Enviando Para Lista.
   async function handleSubmit(event) {
     event.preventDefault();
-
-    try {
-      const res = localStorage.setItem("state", JSON.stringify(state));
-      setError(null);
-      console.log(res);
-      props.history.push("/");
-    } catch (err) {
-      console.log(err.res);
-      setError(err.res.data.error);
-    }
+    const { name, cpf, phone, email } = event.target;
+    const payload = {
+      name: name.value,
+      cpf: cpf.value,
+      phone: phone.value,
+      email: email.value,
+    };
+    const usersFromStore = JSON.parse(localStorage.getItem("users"));
+    usersFromStore.push(payload);
+    console.log(usersFromStore);
+    localStorage.setItem("users", JSON.stringify(usersFromStore));
   }
 
   return (

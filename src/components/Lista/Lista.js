@@ -1,37 +1,36 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import api from "../../apis/api";
 
 export default function Lista(List) {
   // Pegando os dados do cadastro.
-  const [state, setState] = useState({
-    name: "",
-    cpf: "",
-    phone: "",
-    email: "",
-  });
+  const [userList, setUserList] = useState([]);
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    List(state);
-    setState("");
-  }
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Filtrando dados na Lista.
+
   useEffect(() => {
-    try {
-      const res = JSON.parse(localStorage.getItem("state"));
-      if (res) {
-        setState(res);
-      }
-      setState({ state: [...res.data] });
-    } catch (err) {
-      console.log(err);
+    const isRequestReady = JSON.parse(localStorage.getItem("isRequestReady"));
+    if (!isRequestReady) {
+      api.get().then((res) => {
+        localStorage.setItem("users", JSON.stringify(res.data));
+        localStorage.setItem("isRequestReady", "true");
+        setIsLoaded(true);
+      });
+    } else {
+      setIsLoaded(true);
     }
   }, []);
+  useEffect(() => {
+    if (isLoaded) {
+      setUserList(JSON.parse(localStorage.getItem("users")));
+    }
+  }, [isLoaded]);
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={() => console.log("ola")}>
         {/* Titulo */}
         <div className="d-flex justify-content-between mb-4">
           <h3>Cadastros</h3>
@@ -39,6 +38,7 @@ export default function Lista(List) {
             className="btn btn-outline-dark"
             style={{ backgroundColor: "#00c8b3" }}
             to="cadastro"
+            state={userList}
           >
             <h5>Cadastrar</h5>
           </Link>
@@ -54,18 +54,22 @@ export default function Lista(List) {
           </thead>
           <tbody>
             {/* Destiandano os Dados. */}
-            <tr key={state}>
-              <td>{state.name}</td>
-              <td>{state.cpf}</td>
-              <td>{state.phone}</td>
-              <td>{state.email}</td>
-              <td>
-                <Link
-                  className="fas fa-pen text-dark d-flex justify-content-center"
-                  to="cadastro"
-                />
-              </td>
-            </tr>
+            {userList.map((user) => {
+              return (
+                <tr key={user.name}>
+                  <td>{user.name}</td>
+                  <td>{user.cpf}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <Link
+                      className="fas fa-pen text-dark d-flex justify-content-center"
+                      to="cadastro"
+                    />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </form>
