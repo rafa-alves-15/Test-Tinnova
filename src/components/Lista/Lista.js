@@ -30,7 +30,7 @@ export default function Lista(List) {
 
   return (
     <div>
-      <form onSubmit={() => console.log("ola")}>
+      <form onSubmit>
         {/* Titulo */}
         <div className="d-flex justify-content-between mb-4">
           <h3>Cadastros</h3>
