@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import TextInput from "../Input/TextInput";
 
 export default function Editar(props) {
-  // Pegando os dados da Lista para Editar.
+  // Pegando os dados da Lista.
   const [state, setState] = useState({
     name: "",
     cpf: "",

@@ -1,7 +1,7 @@
 import { BrowserRouter, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Lista from "./auth/Lista/Lista";
-import Cadastro from "./auth/Cadastro/Cadastro";
+import Lista from "./Lista/Lista";
+import Cadastro from "./Cadastro/Cadastro";
 
 function App() {
   return (
